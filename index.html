@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elasticsearch Graph Search In Action</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+	<style type="text/css">
+	html, body {
+	height: 100%;
+	}
+
+	html {
+	display: table;
+	margin: auto;
+	}
+
+	body {
+	display: table-cell;
+	vertical-align: top;
+	padding:10px;
+	}
+   </style>
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('mainApp', []);
+
+        // Our search component, responsible for fetching and caching elasticsearch graph search results
+        app.factory('searchHelper', function($http, $cacheFactory) {
+            return {
+                get: function(request, successCallback){
+                    var key = 'search_' + request.term;
+                    if($cacheFactory.get(key) == undefined || $cacheFactory.get(key) == ''){
+                        $http.get('/search', {params: request}).then(function(data){                            
+							$cacheFactory(key).put('result', data.data);
+                            successCallback(data.data);
+                        });
+                    }else{
+                        successCallback($cacheFactory.get(key).get('result'));
+                    }
+                }
+            }
+        });
+
+        // Controller responsible for monitoring user search queries
+        app.controller('graphSearchController', function($scope, searchHelper){
+            $scope.results = [];
+            $scope.$watch('searchTxt', function (val) {
+                var request = {'term': val};
+                if(val != '' && val != undefined && val.length >= 3){
+                    searchHelper.get(request, function(data){
+					   console.log(data);
+                        //$scope.search.users = data.users;
+						$scope.results = data;
+                    });
+                }else{
+                    $scope.results = [];
+                }
+            });
+        });
+    </script>
+</head>
+<body ng-app="mainApp">
+<img src="graph-search-elasticsearch.PNG" alt="graph-search-elasticsearch" style="max-width: 100%;">
+<h3>Elasticsearch Graph Search For Finding Top Marketing books</h3>
+    <div ng-controller="graphSearchController">
+        
+		<div class="row">
+		<input type="text" ng-model="searchTxt" class="col-md-6"/>
+		</div>
+		
+        <div ng-show="results.length > 0">
+		<div class="row">
+            <ul ng-repeat="item in results" class="list-group" style="font-weight:bold;margin-top:10px;">
+                <li class="list-group-item" class="col-md-6">{{ item.title.input }} <span style='color:darkgreen;'><span style='color:red'>By</span></b> {{ item.author }}</span></li>
+            </ul>
+        </div>
+		</div>
+    </div>
+</body>
+</html>

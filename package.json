@@ -1,0 +1,19 @@
+{
+  "name"         : "@alikhan/elasticsearch-graph-search-using-nodejs-angularjs",
+  "version"      : "0.0.1",
+  "description"  : "Elasticsearch Graph Search Using Node.js and Angular.js",
+  "main"         : "server.js",
+  "author"       : "Ali khan",
+  "email"		 : "p2p.alikhan@gmail.com", 	    
+  "dependencies": {
+    "body-parser": "latest",
+    "debug": "latest",
+    "elasticsearch": "latest",
+    "express": "latest",
+	"method-override": "latest",    
+    "serve-favicon": "latest",
+	"request": "latest",
+	"lodash": "latest",
+	"bluebird": "latest"
+  }
+}
