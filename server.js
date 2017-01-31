@@ -1,17 +1,17 @@
-// Initialize dependencies
-var express = require('express');
-var bodyParser = require('body-parser');
-var http = require("http");
-var request = require('request');
-var util = require('util');
-var lodash = require('lodash');
-var bbPromise = require('bluebird');
+	// Initialize dependencies
+	var express = require('express');
+	var bodyParser = require('body-parser');
+	var http = require("http");
+	var request = require('request');
+	var util = require('util');
+	var lodash = require('lodash');
+	var bbPromise = require('bluebird');
 
-var app  = express();
-var portNumber = process.env.PORT || 9000;
-app.set("port", portNumber);
-app.use(express.static('screenshots'));
-app.use(express.static('assets'));
+	var app  = express();
+	var portNumber = process.env.PORT || 9000;
+	app.set("port", portNumber);
+	app.use(express.static('screenshots'));
+	app.use(express.static('assets'));
 
 	// Routes mapping
 	app.get('/', function (req, res) {  
